@@ -1,0 +1,5 @@
+Why tsx?
+
+tsx is a fast TypeScript execute runner (powered by esbuild).
+It allows you to run .ts files directly in development with live reload, 
+avoiding slow ts-node setups or manual tsc compilation loops.
