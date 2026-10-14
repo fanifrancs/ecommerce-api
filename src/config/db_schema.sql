@@ -1,0 +1,53 @@
+-- Enable UUID extension
+CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
+
+-- 1. USERS TABLE
+CREATE TABLE IF NOT EXISTS users (
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    email VARCHAR(255) UNIQUE NOT NULL,
+    password_hash VARCHAR(255) NOT NULL,
+    first_name VARCHAR(100) NOT NULL,
+    last_name VARCHAR(100) NOT NULL,
+    role VARCHAR(20) NOT NULL DEFAULT 'customer',
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+);
+
+-- 2. CATEGORIES TABLE
+CREATE TABLE IF NOT EXISTS categories (
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    name VARCHAR(100) UNIQUE NOT NULL,
+    slug VARCHAR(100) UNIQUE NOT NULL,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+);
+
+-- 3. PRODUCTS TABLE
+CREATE TABLE IF NOT EXISTS products (
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    category_id UUID REFERENCES categories(id) ON DELETE SET NULL,
+    name VARCHAR(255) NOT NULL,
+    description TEXT,
+    price NUMERIC(10, 2) NOT NULL CHECK (price >= 0),
+    stock_quantity INT NOT NULL DEFAULT 0 CHECK (stock_quantity >= 0),
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+);
+
+-- 4. ORDERS TABLE
+CREATE TABLE IF NOT EXISTS orders (
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    user_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+    total_amount NUMERIC(10, 2) NOT NULL CHECK (total_amount >= 0),
+    status VARCHAR(50) NOT NULL DEFAULT 'pending',
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+);
+
+-- 5. ORDER ITEMS TABLE
+CREATE TABLE IF NOT EXISTS order_items (
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    order_id UUID NOT NULL REFERENCES orders(id) ON DELETE CASCADE,
+    product_id UUID NOT NULL REFERENCES products(id) ON DELETE RESTRICT,
+    quantity INT NOT NULL CHECK (quantity > 0),
+    unit_price NUMERIC(10, 2) NOT NULL CHECK (unit_price >= 0)
+);
