@@ -30,3 +30,20 @@ Content-Type: {{contentType}}
 ### 3. Access Protected Route (/me)
 GET {{baseUrl}}/auth/me
 Authorization: Bearer {{authToken}}
+
+### 4. Create Category (Protected)
+POST {{baseUrl}}/categories
+Content-Type: {{contentType}}
+Authorization: Bearer {{authToken}}
+
+{
+  "name": "Electronics",
+  "slug": "electronics"
+}
+
+### 5. Get All Categories (Public)
+GET {{baseUrl}}/categories
+
+### 6. Get Category By ID (Public)
+# Replace <CATEGORY_ID> with an ID returned from Request 5
+GET {{baseUrl}}/categories/<CATEGORY_ID>
