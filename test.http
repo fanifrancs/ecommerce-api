@@ -1,0 +1,32 @@
+### Variables
+@baseUrl = http://127.0.0.1:3000/api/v1
+@contentType = application/json
+
+### 1. Register User
+# @name register
+POST {{baseUrl}}/auth/register
+Content-Type: {{contentType}}
+
+{
+  "email": "dev@example.com",
+  "password": "Password123!",
+  "firstName": "Francis",
+  "lastName": "Dev"
+}
+
+### 2. Login User
+# @name login
+POST {{baseUrl}}/auth/login
+Content-Type: {{contentType}}
+
+{
+  "email": "dev@example.com",
+  "password": "Password123!"
+}
+
+### Save Token from Login Response
+@authToken = {{login.response.body.token}}
+
+### 3. Access Protected Route (/me)
+GET {{baseUrl}}/auth/me
+Authorization: Bearer {{authToken}}
