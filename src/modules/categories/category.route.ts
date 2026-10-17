@@ -4,15 +4,15 @@ import {
   handleGetCategories,
   handleGetCategoryById,
 } from './category.controller.js';
-import { authenticateToken } from '../../middleware/auth.middleware.js';
+import { authenticateToken, requireRole } from '../../middleware/auth.middleware.js';
 
 const router = Router();
 
-// Public routes
+// Public routes (anyone can view categories)
 router.get('/', handleGetCategories);
 router.get('/:id', handleGetCategoryById);
 
-// Protected admin route
-router.post('/', authenticateToken, handleCreateCategory);
+// Admin-only route (must have valid token AND role = 'admin')
+router.post('/', authenticateToken, requireRole('admin'), handleCreateCategory);
 
 export default router;

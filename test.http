@@ -20,8 +20,8 @@ POST {{baseUrl}}/auth/login
 Content-Type: {{contentType}}
 
 {
-  "email": "dev@example.com",
-  "password": "Password123!"
+  "email": "admin@example.com",
+  "password": "AdminPassword123!"
 }
 
 ### Save Token from Login Response
@@ -47,3 +47,85 @@ GET {{baseUrl}}/categories
 ### 6. Get Category By ID (Public)
 # Replace <CATEGORY_ID> with an ID returned from Request 5
 GET {{baseUrl}}/categories/<CATEGORY_ID>
+
+### 7. Create Product (Admin Only)
+# Replace <CATEGORY_ID> with a real category UUID created earlier
+POST {{baseUrl}}/products
+Content-Type: {{contentType}}
+Authorization: Bearer {{authToken}}
+
+{
+  "categoryId": "<CATEGORY_ID>",
+  "name": "Wireless Mechanical Keyboard",
+  "description": "RGB backlight, hot-swappable switches, Bluetooth 5.0",
+  "price": 89.99,
+  "stockQuantity": 25
+}
+
+### 8. Get All Products (Public)
+GET {{baseUrl}}/products
+
+### 9. Filter Products by Category (Public)
+GET {{baseUrl}}/products?categoryId=<CATEGORY_ID>
+
+### 10. Get Single Product by ID (Public)
+# Replace <PRODUCT_ID> with a product UUID returned from Request 8
+GET {{baseUrl}}/products/<PRODUCT_ID>
+
+### 11. Place an Order
+POST {{baseUrl}}/orders
+Content-Type: {{contentType}}
+Authorization: Bearer {{authToken}}
+
+{
+  "items": [
+    {
+      "productId": "<YOUR_PRODUCT_ID>",
+      "quantity": 2
+    }
+  ]
+}
+
+### 12. Get User Order History
+GET {{baseUrl}}/orders
+Authorization: Bearer {{authToken}}
+
+### 13. Get Single Order Details
+GET {{baseUrl}}/orders/<YOUR_ORDER_ID>
+Authorization: Bearer {{authToken}}
+
+### 14. Add Product to Cart
+POST {{baseUrl}}/cart
+Content-Type: {{contentType}}
+Authorization: Bearer {{authToken}}
+
+{
+  "productId": "<YOUR_PRODUCT_ID>",
+  "quantity": 1
+}
+
+### 15. View User Cart
+GET {{baseUrl}}/cart
+Authorization: Bearer {{authToken}}
+
+### 16. Update Cart Item Quantity
+# Replace <CART_ITEM_ID> with the 'id' returned from Request 15
+PATCH {{baseUrl}}/cart/<CART_ITEM_ID>
+Content-Type: {{contentType}}
+Authorization: Bearer {{authToken}}
+
+{
+  "quantity": 3
+}
+
+### 17. Remove Single Item from Cart
+DELETE {{baseUrl}}/cart/<CART_ITEM_ID>
+Authorization: Bearer {{authToken}}
+
+### 18. Clear Entire Cart
+DELETE {{baseUrl}}/cart
+Authorization: Bearer {{authToken}}
+
+### 19. Create Stripe Checkout Session
+POST {{baseUrl}}/checkout/create-session
+Authorization: Bearer {{authToken}}
