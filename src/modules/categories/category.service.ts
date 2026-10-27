@@ -18,12 +18,20 @@ export async function createCategory(name: string, slug: string): Promise<Catego
 }
 
 export async function getAllCategories(): Promise<CategoryRow[]> {
+  /**
+ * Fetches all records from the 'categories' table, selecting only the id, name, 
+ * slug, and created_at columns, and returns them sorted alphabetically (A to Z) by name.
+ */
   const query = `SELECT id, name, slug, created_at FROM categories ORDER BY name ASC;`;
   const result = await db.query(query);
   return result.rows;
 }
 
 export async function getCategoryById(id: string): Promise<CategoryRow | null> {
+  /**
+ * Fetches a single category by its unique ID using a parameterized query. 
+ * Returns the category object if found, or null if no matching record exists.
+ */
   const query = `SELECT id, name, slug, created_at FROM categories WHERE id = $1;`;
   const result = await db.query(query, [id]);
   return result.rows[0] || null;
