@@ -102,6 +102,6 @@ export async function findUserByEmail(email: string): Promise<UserRow | null> {
   // Because a SELECT query returns an empty array [] when nothing is found,
   // result.rows[0] would evaluate to undefined. Adding || null ensures the
   // TypeScript function cleanly returns null instead of undefined,
-  // matching the Promise<UserRow null |> return type
+  // matching the Promise<UserRow | null> return type
   return result.rows[0] || null;
 }

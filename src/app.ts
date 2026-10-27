@@ -23,7 +23,12 @@ export function buildApp(): Express {
   
   app.get('/health', async (req, res) => {
     try {
+      // SELECT NOW() is a simple SQL query that retrieves the
+      // current date and time from the database server. This is
+      // often used to check if the database connection is working
+      // properly.
       const result = await db.query('SELECT NOW()');
+      // .now is a PostgreSQL function that returns the current date and time.
       res.status(200).json({ status: 'ok', dbTime: result.rows[0].now });
     } catch (err) {
       res.status(500).json({ status: 'error', message: 'Database connection failed' });
