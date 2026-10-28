@@ -30,6 +30,18 @@ export async function getCartByUserId(userId: string): Promise<CartItemRow[]> {
 }
 
 export async function addToCart(userId: string, productId: string, quantity: number) {
+  /* 
+    This SQL query performs an upsert operation to add or update items in a 
+    shopping cart. It attempts to insert a new row into the cart_items table 
+    with the specified user_id, product_id, and quantity values using 
+    parameterized placeholders. If a unique constraint violation occurs 
+    because the user already has that product in their cart, the ON CONFLICT 
+    clause catches it. Instead of failing, it triggers the DO UPDATE SET 
+    logic, adding the newly attempted quantity to the existing database 
+    quantity and refreshing the updated_at timestamp with the current time. 
+    Finally, the RETURNING clause instructs the database to immediately hand 
+    back the updated record data so the application can use it.
+  */
   const query = `
     INSERT INTO cart_items (user_id, product_id, quantity)
     VALUES ($1, $2, $3)

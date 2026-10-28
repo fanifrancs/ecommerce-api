@@ -14,6 +14,28 @@ export async function handleGetCart(req: AuthenticatedRequest, res: Response) {
     if (!userId) return res.status(401).json({ message: 'Unauthenticated' });
 
     const items = await getCartByUserId(userId);
+
+    // .reduce() is an array method that loops through every element in the items array
+    // and "reduces" them down into a single final value (in this case, a single total number)
+
+    /* 
+      The line declares a constant variable named cartTotal to store the final
+      calculated sum of all items. It uses the Array.prototype.reduce() method
+      to loop through every element in the items array and reduce them down into
+      a single final numerical value. Inside the reduce callback function, it
+      accepts two primary arguments: 'acc', which acts as the accumulator or
+      running total that holds the accumulated sum from previous iterations, and
+      'item', which represents the specific product object currently being
+      processed in the loop. For every single item, it takes the current running
+      total stored in 'acc' and adds the item's subtotal to it. It wraps
+      'item.subtotal' inside the Number() function to ensure that whatever format
+      the subtotal is in—even if it accidentally arrived from a database or API
+      as a string like "49.99"—it gets safely converted into a real number,
+      preventing bugs like string concatenation where 100 + "50" turns into
+      "10050". Finally, the comma followed by 0 at the very end (, 0) defines
+      the initial value of the accumulator, instructing JavaScript to start
+      the running total at 0 on the very first loop iteration.
+    */
     const cartTotal = items.reduce((acc, item) => acc + Number(item.subtotal), 0);
 
     return res.status(200).json({ items, cartTotal });
