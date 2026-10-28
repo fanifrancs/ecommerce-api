@@ -12,7 +12,8 @@ const router = Router();
 router.get('/', handleGetProducts);
 router.get('/:id', handleGetProductById);
 
-// Admin-only route
+// Admin-only route to create a new product. This route is protected by
+// authentication and role-based access control.
 router.post('/', authenticateToken, requireRole('admin'), handleCreateProduct);
 
 export default router;

@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { createProduct, getAllProducts, getProductById, updateProduct, deleteProduct } from './product.service.js';
+import { createProduct, getAllProducts, getProductById } from './product.service.js';
 
 interface ProductParams {
   id: string;
@@ -41,6 +41,8 @@ export async function handleCreateProduct(req: Request, res: Response) {
 }
 
 export async function handleGetProducts(
+  // ProductQuery is used to type the query parameters for this request,
+  // specifically the optional categoryId.
   req: Request<{}, {}, {}, ProductQuery>, 
   res: Response
 ) {

@@ -38,6 +38,11 @@ export async function createProduct(input: CreateProductInput): Promise<ProductR
 }
 
 export async function getAllProducts(categoryId?: string): Promise<ProductRow[]> {
+  /* 
+    Retrieve all product details and join with categories to fetch the category name.
+    - Uses a LEFT JOIN so products without a category still show up.
+    - Renames c.name to category_name to avoid a naming collision with p.name.
+  */
   let query = `
     SELECT p.id, p.category_id, p.name, p.description, p.price, p.stock_quantity, p.created_at, c.name AS category_name
     FROM products p
