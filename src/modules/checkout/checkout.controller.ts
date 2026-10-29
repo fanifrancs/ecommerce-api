@@ -69,5 +69,9 @@ export async function handleStripeWebhook(req: Request, res: Response) {
     }
   }
 
+  // Sends a success response (200 OK) back to Stripe. This is critical:
+  // if Stripe doesn't receive a 200 status code, it assumes your server 
+  // crashed and will automatically retry sending the webhook over and 
+  // over again for up to 3 days
   return res.status(200).json({ received: true });
 }
