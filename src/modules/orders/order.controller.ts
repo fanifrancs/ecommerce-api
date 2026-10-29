@@ -23,6 +23,8 @@ export async function handleCreateOrder(req: AuthenticatedRequest, res: Response
     return res.status(201).json({ message: 'Order created successfully', order });
   } catch (err: any) {
     console.error('Create order error:', err.message);
+    // code 400 is used for bad requests, which is appropriate here since the 
+    // error is likely due to invalid input or request data.
     return res.status(400).json({ message: err.message || 'Failed to place order' });
   }
 }
